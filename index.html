@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lämpötilamuunnin</title>
+</head>
+<body>
+    <h1><strong>Lämpötilamuunnin</strong></h1>
+    <p>Valitse muunnos:</p>
+    <select id="conversionType">
+        <option value="celsiusToFahrenheit">Celsius - Fahrenheit</option>
+        <option value="fahrenheitToCelsius">Fahrenheit - Celsius</option>
+    </select>
+    <p>Syötä lämpötila:</p>
+    <input type="number" id="temperatureInput" placeholder="Syötä lämpötila">
+    <button onclick="convertTemperature()">Muunna</button>
+    <p>Tuloksen tarkkuus:</p>
+    <input type="radio" name="precision" value="1" id="precision1"> 1 desimaali
+    <input type="radio" name="precision" value="2" id="precision2"> 2 desimaalia
+    <input type="radio" name="precision" value="3" id="precision3" checked> 3 desimaalia
+    <p>Tulos:</p>
+    <p id="result">-</p>
+    <p id="error-message" style="color: red;"></p>
+
+    <script>
+        function convertTemperature() {
+            const conversionType = document.getElementById("conversionType").value;
+            const temperatureInput = parseFloat(document.getElementById("temperatureInput").value);
+            const precision = parseInt(document.querySelector('input[name="precision"]:checked').value);
+            const errorMessage = document.getElementById("error-message");
+
+            if (isNaN(temperatureInput)) {
+                errorMessage.innerText = "Syötä kelvin-lämpötila numerona.";
+                return;
+            } else {
+                errorMessage.innerText = "";
+            }
+
+            if (conversionType === "celsiusToFahrenheit") {
+                if (temperatureInput < -273.15) {
+                    errorMessage.innerText = "Huom: Lämpötila on pienempi kuin absoluuttinen nollapiste!";
+                    return;
+                }
+            } else if (conversionType === "fahrenheitToCelsius") {
+                if (temperatureInput < -459.67) {
+                    errorMessage.innerText = "Huom: Lämpötila on pienempi kuin absoluuttinen nollapiste!";
+                    return;
+                }
+            }
+
+            errorMessage.innerText = "";
+
+            let result = 0;
+
+            if (conversionType === "celsiusToFahrenheit") {
+                result = (temperatureInput * 9/5 + 32).toFixed(precision);
+            } else if (conversionType === "fahrenheitToCelsius") {
+                result = ((temperatureInput - 32) * 5/9).toFixed(precision);
+            }
+
+            document.getElementById("result").innerText = result;
+        }
+    </script>
+</body>
+</html>
